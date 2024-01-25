@@ -1,9 +1,3 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[31]:
-
-
 ##Hospital Re-Admission
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -15,15 +9,7 @@ import dtale
 df=pd.read_csv("C:\\Users\\DELL\\Downloads\\Final Projects\\hospital_readmissions.csv")
 #dtale.show(df)
 
-
-# In[32]:
-
-
 df.columns
-
-
-# In[3]:
-
 
 ## Data Preprocessing
 # Step 1
@@ -32,22 +18,11 @@ df.columns
 ##Info on data
 df.info()
 
-
-# In[4]:
-
-
 #Decription of Data
 df.describe()
 
-
-# In[5]:
-
-
 ## Handling missing data
 df.isnull().sum()
-
-
-# In[6]:
 
 
 ## filling the numnerical missing values in mean and categprical missing values in mode.
@@ -55,9 +30,6 @@ df['A1C_Result']=df['A1C_Result'].fillna(df['A1C_Result'].mode()[0])
 
 ##checking again the columns having any missing values
 df.isnull().sum()*100/len(df)
-
-
-# In[7]:
 
 
 # Check for duplicates in the entire DataFrame
@@ -71,17 +43,10 @@ else:
     print("No duplicate rows.")
 
 
-# In[8]:
-
-
 #Boxplot
 plt.boxplot(df[['Age','Num_Lab_Procedures','Num_Medications',
                 'Num_Outpatient_Visits','Num_Inpatient_Visits','Num_Emergency_Visits','Num_Diagnoses']])
 plt.show()
-
-
-# In[9]:
-
 
 ## Data Exploration and Analysis
 #Understand the distribution of the data through visualizations.
@@ -104,15 +69,7 @@ for i, col in enumerate(numerical_columns, 1):
 plt.tight_layout()
 plt.show()
 
-
-# In[10]:
-
-
 df.columns
-
-
-# In[11]:
-
 
 # Categorical Features: Bar Plots
 #It provides insights into the frequency of each category.
@@ -129,10 +86,6 @@ for i, col in enumerate(categorical_columns, 1):
     plt.ylabel('Count')
 plt.tight_layout()
 plt.show()
-
-
-# In[12]:
-
 
 ## Heat map
 #This heatmap will help you visually identify the strength and direction of linear relationships between the numerical variables.
@@ -152,14 +105,8 @@ plt.title('Correlation Matrix Heatmap')
 plt.show()
 
 
-# In[13]:
-
-
 ## Scatter Plot
 sn.relplot(x='Num_Medications',y='Num_Outpatient_Visits',hue='Readmitted',data=df)
-
-
-# In[14]:
 
 
 #Multivariate Analysis:To see realtionships b/w all numeric variables
@@ -168,21 +115,10 @@ df=df.drop('Patient_ID',axis=1)
 sn.pairplot(df)
 
 
-# In[15]:
-
-
 ##Target Variable Analysis:
 df['Readmitted'].value_counts()
 
-
-# In[16]:
-
-
 df.info()
-
-
-# In[17]:
-
 
 ##Encoding Variables:
 #In Label Encoding, each category in a categorical variable is assigned a unique integer label.
@@ -199,19 +135,10 @@ df['Gender']=df['Gender'].map({'Male':1,'Female':0,'Other':2}).astype('int')
 df['Readmitted']=df['Readmitted'].map({'Yes':1,'No':0}).astype('int')
 
 
-# In[18]:
-
-
 df.head(2)
 
 
-# In[19]:
-
-
 df_1=df[['Age','Gender','Admission_Type','Diagnosis','Num_Lab_Procedures','Num_Medications','A1C_Result','Readmitted']]
-
-
-# In[20]:
 
 
 ## Feature Scaling -- It helps in finding the distance b/w the data.
@@ -222,13 +149,7 @@ st=StandardScaler()
 df_1[col]=scaled_data=st.fit_transform(df_1[col])
 
 
-# In[21]:
-
-
 df_1.head(2)
-
-
-# In[22]:
 
 
 cleaned_data=df_1.drop('Readmitted',axis=1)
@@ -265,10 +186,6 @@ for model_name,(model,param_grid) in Models.items():
     print(f"Best Parameters for {model_name}:{grid.best_params_}")
     print(f"Best Accuracy for {model_name}:{grid.best_score_}\n")
 
-
-# In[23]:
-
-
 ## Neural Network
 import tensorflow as tf
 from tensorflow.keras.models import Sequential
@@ -293,9 +210,6 @@ model_relu.compile(optimizer='adam',loss='binary_crossentropy',metrics=['accurac
 model_relu.fit(x_train,y_train,epochs=50,batch_size=32,validation_data=(x_test,y_test),validation_batch_size=32)
 
 
-# In[24]:
-
-
 ran=RandomForestClassifier(max_depth= 5, n_estimators= 500)
 ran.fit(x_train,y_train)
 y_pred=ran.predict(x_test)
@@ -303,17 +217,10 @@ accuracy = accuracy_score(y_test, y_pred)
 roc_auc = roc_auc_score(y_test, y_pred)
 f1 = f1_score(y_test, y_pred)
 
-
-# In[25]:
-
-
 print(f"Accuracy: {accuracy}")
 print(f"ROC AUC Score: {roc_auc}")
 print(f"F1 Score: {f1}")
 print(classification_report(y_test, y_pred))
-
-
-# In[26]:
 
 
 # ROC Curve
@@ -331,9 +238,6 @@ plt.legend(loc='lower right')
 plt.show()
 
 
-# In[27]:
-
-
 # Precision-Recall Curve
 precision, recall, _ = precision_recall_curve(y_test, y_pred)
 pr_auc = auc(recall, precision)
@@ -345,10 +249,6 @@ plt.title('Precision-Recall Curve')
 plt.legend(loc='upper right')
 plt.show()
 
-
-# In[28]:
-
-
 import pickle
 
 # now you can save it to a file
@@ -358,16 +258,6 @@ with open(file, 'wb') as f:
     
 with open(file, 'rb') as f:
     k = pickle.load(f)
-
-
-# In[29]:
-
-
-df_1.columns
-
-
-# In[30]:
-
 
 import streamlit as st
 from PIL import Image
